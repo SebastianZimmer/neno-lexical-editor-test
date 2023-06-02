@@ -1,0 +1,23 @@
+div[data-lexical-editor] {
+  max-width: 750px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 18px;
+  margin: auto;
+  background: lightgrey;
+  border-radius: 7px;
+  padding: 5px;
+  min-height: 350px;
+}
+
+
+div[data-lexical-editor] > p {
+  margin: 0;
+}
+
+.hashtag {
+  background-color: rgb(192, 255, 255);
+}
+
+.link {
+  cursor: pointer;
+}

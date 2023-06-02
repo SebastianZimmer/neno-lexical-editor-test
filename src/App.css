@@ -74,7 +74,9 @@ body,
   margin: 0;
   padding: 10px;
   background-color: var(--background-color);
-  color: var(--font-color);
+  color: var(--main-content-color);
+  font-family: "IBM Plex Mono", monospace;
+  text-align: center;
 }
 
 div[data-lexical-editor] {
@@ -90,6 +92,8 @@ div[data-lexical-editor] {
   border: none;
   color: var(--main-content-color);
   outline: none;
+
+  text-align: start;
 }
 
 
@@ -98,11 +102,15 @@ div[data-lexical-editor] > p {
 }
 
 .hashtag {
-  background-color: var(--link-color);
+  color: var(--alt-content-color);
 }
 
 .link {
   cursor: pointer;
   text-decoration: none;
   color: var(--link-color);
+}
+
+.s_heading {
+  font-weight: bold;
 }

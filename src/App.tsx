@@ -19,7 +19,9 @@ import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HashtagNode } from './nodes/HashtagNode';
+import { HeadingNode } from './nodes/HeadingNode';
 import { HashtagPlugin } from './plugins/HashtagPlugin';
+import { HeadingPlugin } from './plugins/HeadingPlugin';
 import LinkPlugin from './plugins/LinkPlugin';
 import { AutoLinkNode } from '@lexical/link';
 
@@ -30,6 +32,7 @@ const theme = {
   paragraph: 'editor-paragraph',
   hashtag: 'hashtag',
   link: 'link',
+  s_heading: 's_heading', // heading seems to be a reserved word
 }
 
 
@@ -91,20 +94,26 @@ export const App = () => {
     namespace: 'MyEditor', 
     theme,
     onError,
-    nodes: [HashtagNode, AutoLinkNode],
+    nodes: [HashtagNode, AutoLinkNode, HeadingNode],
   };
 
   const [notes, setNotes] = useState([
-    "This is an example note.\nIt contains a http://weblink.com\nIt also contains a /slashlink and a [[Wikilink]]\nThere is also a #hashtag",
-    "Note 2 text",
+    `This is an example note.
+
+# Heading
+It contains a weblink to http://en.wikipedia.org
+It also contains a /slashlink and a [[Wikilink]]. Clicks on those can be handled with custom event handlers.
+There is also a #hashtag`,
+"Note 2 text",
   ]);
 
-  const [activeNoteIndex, setActiveNoteIndex] = useState(-1);
-  const [text, setText] = useState("");
+  const [activeNoteIndex, setActiveNoteIndex] = useState(0);
+  const [text, setText] = useState(notes[0]);
   const [currentEditorText, setCurrentEditorText] = useState(text);
 
   return (
     <>
+      <h1>Subtext Web Editor PoC</h1>
       <LexicalComposer initialConfig={initialConfig}>
         <PlainTextPlugin
           contentEditable={<ContentEditable />}
@@ -124,6 +133,7 @@ export const App = () => {
         <HistoryPlugin />
         <MyCustomAutoFocusPlugin />
         <HashtagPlugin />
+        <HeadingPlugin />
         <LinkPlugin />
         <NodeEventPlugin
           nodeType={AutoLinkNode}

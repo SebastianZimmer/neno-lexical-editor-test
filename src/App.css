@@ -114,3 +114,11 @@ div[data-lexical-editor] > p {
 .s_heading {
   font-weight: bold;
 }
+
+.wikilink-content {
+  color: var(--link-color);
+}
+
+.wikilink-punctuation {
+  color: var(--alt-content-color);
+}

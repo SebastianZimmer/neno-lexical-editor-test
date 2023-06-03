@@ -36,6 +36,8 @@ const theme = {
   hashtag: 'hashtag',
   link: 'link',
   s_heading: 's_heading', // heading seems to be a reserved word
+  wikiLinkPunctuation: 'wikilink-punctuation',
+  wikiLinkContent: 'wikilink-content',
 }
 
 

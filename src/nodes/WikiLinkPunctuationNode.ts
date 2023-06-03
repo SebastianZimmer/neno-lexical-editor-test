@@ -36,7 +36,7 @@ export class WikiLinkPunctuationNode extends TextNode {
 
   static importJSON(serializedNode: SerializedTextNode): WikiLinkPunctuationNode {
     const node = $createWikiLinkPunctuationNode(serializedNode.text);
-    //node.setFormat(serializedNode.format);
+    node.setFormat(serializedNode.format);
     node.setDetail(serializedNode.detail);
     node.setMode(serializedNode.mode);
     node.setStyle(serializedNode.style);

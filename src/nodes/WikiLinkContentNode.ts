@@ -36,7 +36,7 @@ export class WikiLinkContentNode extends TextNode {
 
   static importJSON(serializedNode: SerializedTextNode): WikiLinkContentNode {
     const node = $createWikiLinkContentNode(serializedNode.text);
-    //node.setFormat(serializedNode.format);
+    node.setFormat(serializedNode.format);
     node.setDetail(serializedNode.detail);
     node.setMode(serializedNode.mode);
     node.setStyle(serializedNode.style);

@@ -21,9 +21,6 @@ const EMAIL_REGEX =
 const SLASHLINK_REGEX = 
   /(@[\w-/]+)?(\/[\w-]+)+/;
 
-const WIKILINK_REGEX = 
-  /\[\[[\w-\s]+\]\]/;
-
 const MATCHERS = [
   createLinkMatcherWithRegExp(URL_REGEX, (text) => {
     return text.startsWith('http') ? text : `https://${text}`;
@@ -33,9 +30,6 @@ const MATCHERS = [
   }),
   createLinkMatcherWithRegExp(SLASHLINK_REGEX, (text) => {
     return "#" + text.substring(1);
-  }),
-  createLinkMatcherWithRegExp(WIKILINK_REGEX, (text) => {
-    return "#" + text.substring(2, text.length - 2).toLowerCase().replace(/\s+/g, "-");
   }),
 ];
 

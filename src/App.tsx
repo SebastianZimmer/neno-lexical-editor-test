@@ -24,6 +24,9 @@ import { HashtagPlugin } from './plugins/HashtagPlugin';
 import { HeadingPlugin } from './plugins/HeadingPlugin';
 import LinkPlugin from './plugins/LinkPlugin';
 import { AutoLinkNode } from '@lexical/link';
+import { WikiLinkContentNode } from './nodes/WikiLinkContentNode';
+import { WikiLinkPlugin } from './plugins/WikilinkPlugin';
+import { WikiLinkPunctuationNode } from './nodes/WikiLinkPunctuationNode';
 
 const theme = {
   ltr: 'ltr',
@@ -94,7 +97,13 @@ export const App = () => {
     namespace: 'MyEditor', 
     theme,
     onError,
-    nodes: [HashtagNode, AutoLinkNode, HeadingNode],
+    nodes: [
+      HashtagNode,
+      AutoLinkNode,
+      HeadingNode,
+      WikiLinkContentNode,
+      WikiLinkPunctuationNode,
+    ],
   };
 
   const [notes, setNotes] = useState([
@@ -135,6 +144,7 @@ There is also a #hashtag`,
         <HashtagPlugin />
         <HeadingPlugin />
         <LinkPlugin />
+        <WikiLinkPlugin />
         <NodeEventPlugin
           nodeType={AutoLinkNode}
           eventType='click'

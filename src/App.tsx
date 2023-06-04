@@ -27,6 +27,8 @@ import { AutoLinkNode } from '@lexical/link';
 import { WikiLinkContentNode } from './nodes/WikiLinkContentNode';
 import { WikiLinkPlugin } from './plugins/WikilinkPlugin';
 import { WikiLinkPunctuationNode } from './nodes/WikiLinkPunctuationNode';
+import { BoldNode } from './nodes/BoldNode';
+import { BoldPlugin } from './plugins/BoldPlugin';
 
 const theme = {
   ltr: 'ltr',
@@ -38,6 +40,7 @@ const theme = {
   s_heading: 's_heading', // heading seems to be a reserved word
   wikiLinkPunctuation: 'wikilink-punctuation',
   wikiLinkContent: 'wikilink-content',
+  bold: 'bold',
 }
 
 
@@ -105,6 +108,7 @@ export const App = () => {
       HeadingNode,
       WikiLinkContentNode,
       WikiLinkPunctuationNode,
+      BoldNode,
     ],
   };
 
@@ -112,9 +116,9 @@ export const App = () => {
     `This is an example note.
 
 # Heading
-It contains a weblink to http://en.wikipedia.org
-It also contains a /slashlink and a [[Wikilink]]. Clicks on those can be handled with custom event handlers.
-There is also a #hashtag`,
+It contains a weblink to https://en.wikipedia.org
+It also contains a /slashlink-to-somewhere and a [[Wikilink]]. Pointer events with those targets can be handled with custom event handlers.
+There is also some *bold text* a #hashtag.`,
 "Note 2 text",
   ]);
 
@@ -144,6 +148,7 @@ There is also a #hashtag`,
         <HistoryPlugin />
         <MyCustomAutoFocusPlugin />
         <HashtagPlugin />
+        <BoldPlugin />
         <HeadingPlugin />
         <LinkPlugin />
         <WikiLinkPlugin />
@@ -154,15 +159,10 @@ There is also a #hashtag`,
             const isSlashlink = (str: string) => {
               return str.startsWith("@") || str.startsWith("/");
             }
-            const isWikilink = (str: string) => {
-              return str.startsWith("[[") && str.endsWith("]]");
-            }
             if (!(e && e.target)) return;
             const link = (e.target as HTMLElement).innerText;
             if (isSlashlink(link)) {
               console.log("Click on slashlink: " + link);
-            } else if (isWikilink(link)) {
-              console.log("Click on wikilink: " + link);
             } else {
               window.open(link);
             }

@@ -8,6 +8,7 @@
 
 import {
   $createTextNode,
+  $getSelection,
   $isTextNode,
   LexicalEditor,
   TextNode,
@@ -59,46 +60,7 @@ function registerWikilinkTransforms(
     let text = node.getTextContent();
     let currentNode = node;
     let match: EntityMatch | null;
-/*
-    if ($isTextNode(prevSibling)) { 
-      const previousText = prevSibling.getTextContent();
-      const combinedText = previousText + text;
-      const prevMatch = getMatch(combinedText);
 
-      if (
-        $isWikiLinkPunctuationNode(prevSibling)
-        && $isWikiLinkContentNode(prevSibling.getPreviousSibling())
-        && $isWikiLinkPunctuationNode(prevSibling.getPreviousSibling()?.getPreviousSibling())
-      ) {
-        if (prevMatch === null || getMode(prevSibling) !== 0) {
-          replaceWithSimpleText(prevSibling);
-          replaceWithSimpleText(prevSibling.getPreviousSibling() as TextNode);
-          replaceWithSimpleText(prevSibling.getPreviousSibling()?.getPreviousSibling() as TextNode);
-          return;
-        } else {
-          const diff = prevMatch.end - previousText.length;
-
-          if (diff > 0) { // entity got bigger
-            const concatText = text.slice(0, diff);
-            const newTextContent = previousText + concatText;
-            prevSibling.select();
-            prevSibling.setTextContent(newTextContent);
-
-            if (diff === text.length) {
-              node.remove();
-            } else {
-              const remainingText = text.slice(diff);
-              node.setTextContent(remainingText);
-            }
-
-            return;
-          }
-        }
-      } else if (prevMatch === null || prevMatch.start < previousText.length) {
-        return;
-      }
-    }
-*/
     // eslint-disable-next-line no-constant-condition
     while (true) {
       match = getWikiLinkMatch(text);
@@ -147,7 +109,35 @@ function registerWikilinkTransforms(
       nodeToReplace.insertAfter(replacementNode1);
       replacementNode1.insertAfter(replacementNode2);
       replacementNode2.insertAfter(replacementNode3);
+
+      // restore selection in new nodes
+      const selection = $getSelection();
+      let selectionOffset = NaN;
+      // check if original selection was inside node to be removed
+      if (
+        selection
+        && "focus" in selection
+        && selection.focus.key === nodeToReplace.getKey()
+      ) {
+        selectionOffset = selection.focus.offset;
+      }
       nodeToReplace.remove();
+
+      // if selection was in old node that was removed, restore selection
+      // in new nodes
+      if (!isNaN(selectionOffset)) {
+        if (selectionOffset < 3) {
+          replacementNode1.select(selectionOffset, selectionOffset);
+        } else if (selectionOffset > nodeToReplace.getTextContent().length - 2) {
+          const newNodeOffset
+            = selectionOffset - replacementNode2.getTextContent().length - 2;
+          replacementNode3.select(newNodeOffset, newNodeOffset);
+        } else {
+          const newNodeOffset
+            = selectionOffset - 2;
+          replacementNode2.select(newNodeOffset, newNodeOffset);
+        }
+      }
     }
   };
 

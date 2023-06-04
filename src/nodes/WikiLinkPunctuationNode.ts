@@ -54,6 +54,13 @@ export class WikiLinkPunctuationNode extends TextNode {
   isInline(): boolean {
     return true;
   }
+
+  exportJSON(): SerializedTextNode {
+    return {
+      ...super.exportJSON(),
+      type: 'wikiLinkPunctuation',
+    };
+  }
 }
 
 /**

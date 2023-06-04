@@ -54,6 +54,13 @@ export class WikiLinkContentNode extends TextNode {
   isInline(): boolean {
     return true;
   }
+
+  exportJSON(): SerializedTextNode {
+    return {
+      ...super.exportJSON(),
+      type: 'wikiLinkContent',
+    };
+  }
 }
 
 /**

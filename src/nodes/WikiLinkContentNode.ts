@@ -61,6 +61,13 @@ export class WikiLinkContentNode extends TextNode {
       type: 'wikiLinkContent',
     };
   }
+
+  isValid(): boolean {
+    const text = this.__text;
+    return text.length > 0
+      && !text.includes("[[")
+      && !text.includes("]]");
+  }
 }
 
 /**

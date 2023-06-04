@@ -15,17 +15,25 @@ import type {
 import {addClassNamesToElement} from '@lexical/utils';
 import {$applyNodeReplacement, TextNode} from 'lexical';
 
+
+interface SerializedWikiLinkPunctuationNode extends SerializedTextNode {
+  __isClosing: boolean;
+}
+
 export class WikiLinkPunctuationNode extends TextNode {
   static getType(): string {
     return 'wikiLinkPunctuation';
   }
 
   static clone(node: WikiLinkPunctuationNode): WikiLinkPunctuationNode {
-    return new WikiLinkPunctuationNode(node.__text);
+    return new WikiLinkPunctuationNode(node.__isClosing);
   }
 
-  constructor(text: string) {
-    super(text);
+  __isClosing = false;
+
+  constructor(isClosing: boolean) {
+    super(isClosing ? "]]" : "[[");
+    this.__isClosing = isClosing;
   }
 
   createDOM(config: EditorConfig): HTMLElement {
@@ -34,8 +42,10 @@ export class WikiLinkPunctuationNode extends TextNode {
     return element;
   }
 
-  static importJSON(serializedNode: SerializedTextNode): WikiLinkPunctuationNode {
-    const node = $createWikiLinkPunctuationNode(serializedNode.text);
+  static importJSON(
+    serializedNode: SerializedWikiLinkPunctuationNode,
+  ): WikiLinkPunctuationNode {
+    const node = $createWikiLinkPunctuationNode(serializedNode.__isClosing);
     node.setFormat(serializedNode.format);
     node.setDetail(serializedNode.detail);
     node.setMode(serializedNode.mode);
@@ -55,6 +65,13 @@ export class WikiLinkPunctuationNode extends TextNode {
     return true;
   }
 
+  isValid(): boolean {
+    return (
+      (this.__isClosing && this.__text === "]]")
+      || ((!this.__isClosing) && this.__text === "[[")
+    );
+  }
+
   exportJSON(): SerializedTextNode {
     return {
       ...super.exportJSON(),
@@ -68,8 +85,8 @@ export class WikiLinkPunctuationNode extends TextNode {
  * @param text - The text used inside the WikiLinkPunctuationNode.
  * @returns - The WikiLinkPunctuationNode with the embedded text.
  */
-export function $createWikiLinkPunctuationNode(text = ''): WikiLinkPunctuationNode {
-  return $applyNodeReplacement(new WikiLinkPunctuationNode(text));
+export function $createWikiLinkPunctuationNode(isClosing: boolean): WikiLinkPunctuationNode {
+  return $applyNodeReplacement(new WikiLinkPunctuationNode(isClosing));
 }
 
 /**

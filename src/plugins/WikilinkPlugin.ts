@@ -102,9 +102,9 @@ function registerWikilinkTransforms(
         2,
         nodeToReplace.getTextContent().length - 2,
       );
-      const replacementNode1 = $createWikiLinkPunctuationNode("[[");
+      const replacementNode1 = $createWikiLinkPunctuationNode(false);
       const replacementNode2 = $createWikiLinkContentNode(wikilinkTextContent);
-      const replacementNode3 = $createWikiLinkPunctuationNode("]]");
+      const replacementNode3 = $createWikiLinkPunctuationNode(true);
 
       nodeToReplace.insertAfter(replacementNode1);
       replacementNode1.insertAfter(replacementNode2);
@@ -144,28 +144,29 @@ function registerWikilinkTransforms(
   const reverseWikilinkContentNodeTransform = (
     node: WikiLinkContentNode
   ) => {
-    // TODO: check if punctuation and content is still intact
+    if (!node.getParent()) return;
+    // check if punctuation and content is still intact
     // if not: transform all three into simple text nodes
-    const text = node.getTextContent();
     const prevSibling = node.getPreviousSibling();
     const nextSibling = node.getNextSibling();
 
+    if (!prevSibling?.getParent()) return;
+    if (!nextSibling?.getParent()) return;
+
     if (
-      text.length === 0
-      || !$isWikiLinkPunctuationNode(prevSibling)
-      || prevSibling?.getTextContent() !== "[["
+      !$isWikiLinkPunctuationNode(prevSibling)
       || !$isWikiLinkPunctuationNode(nextSibling)
-      || nextSibling?.getTextContent() !== "]]"
-    ) { console.log("Reverse content node");
+      || !node.isValid()
+      || !prevSibling.isValid()
+      || !nextSibling.isValid()
+    ) {
       replaceWithSimpleText(node);
 
-      if ($isTextNode(prevSibling) && prevSibling.isTextEntity()) {
-        replaceWithSimpleText(prevSibling);
-      }
+      $isWikiLinkPunctuationNode(prevSibling)
+        && replaceWithSimpleText(prevSibling);
 
-      if ($isTextNode(nextSibling) && nextSibling.isTextEntity()) {
-        replaceWithSimpleText(nextSibling);
-      }
+      $isWikiLinkPunctuationNode(nextSibling)
+        && replaceWithSimpleText(nextSibling);
     }
   };
 
@@ -173,38 +174,16 @@ function registerWikilinkTransforms(
   const reverseWikilinkPunctuationNodeTransform = (
     node: WikiLinkPunctuationNode
   ) => {
-    // TODO: check if punctuation and content is still intact
-    // if not: transform all three into simple text nodes
+    // check if punctuation and content is still intact
+    // if not: transform back to simple text node
+    if (!node.getParent()) return;
 
-    const isOpeningNode = node.getTextContent() === "[[";
-    const isClosingNode = node.getTextContent() === "]]";
+    const hasAccompanyingContentNode = node.__isClosing
+      ? $isWikiLinkContentNode(node.getPreviousSibling())
+      : $isWikiLinkContentNode(node.getNextSibling())
 
-    if (!(isOpeningNode || isClosingNode)) {
+    if (!node.isValid() || (!hasAccompanyingContentNode)) {
       replaceWithSimpleText(node);
-      return;
-    }
-
-    let openingNode;
-    let contentNode;
-    let closingNode;
-
-    if (isOpeningNode) {
-      openingNode = node;
-      contentNode = node.getNextSibling();
-      closingNode = contentNode?.getNextSibling();
-    } else if (isClosingNode) {
-      closingNode = node;
-      contentNode = node.getPreviousSibling();
-      openingNode = contentNode?.getPreviousSibling();
-    }
-
-    if (
-      openingNode?.getTextContent() !== "[["
-      || closingNode?.getTextContent() !== "]]"
-    ) {
-      $isWikiLinkPunctuationNode(openingNode) && replaceWithSimpleText(openingNode);
-      $isWikiLinkContentNode(contentNode) && replaceWithSimpleText(contentNode);
-      $isWikiLinkPunctuationNode(closingNode) && replaceWithSimpleText(closingNode);
     }
   };
 
@@ -218,11 +197,14 @@ function registerWikilinkTransforms(
       WikiLinkContentNode,
       reverseWikilinkContentNodeTransform,
     );
+
+
   const removeReverseWikilinkPunctuationNodeTransform
     = editor.registerNodeTransform<WikiLinkPunctuationNode>(
       WikiLinkPunctuationNode,
       reverseWikilinkPunctuationNodeTransform,
     );
+
 
   return [
     removePlainTextTransform,
@@ -233,7 +215,7 @@ function registerWikilinkTransforms(
 
 
 
-const REGEX = /\[\[.+\]\]/;
+const REGEX = /\[\[[^[\]]+\]\]/;
 
 export function WikiLinkPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();

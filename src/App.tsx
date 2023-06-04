@@ -117,7 +117,7 @@ export const App = () => {
 
 # Heading
 It contains a weblink to https://en.wikipedia.org
-It also contains a /slashlink-to-somewhere and a [[Wikilink]]. Pointer events with those targets can be handled with custom event handlers.
+It also contains a /slashlink, an @external/slashlink and a [[Wikilink]]. Pointer events with those targets can be handled with custom event handlers.
 There is also some *bold text* a #hashtag.`,
 "Note 2 text",
   ]);

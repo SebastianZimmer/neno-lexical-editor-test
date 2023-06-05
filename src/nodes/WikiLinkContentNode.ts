@@ -65,8 +65,8 @@ export class WikiLinkContentNode extends TextNode {
   isValid(): boolean {
     const text = this.__text;
     return text.length > 0
-      && !text.includes("[[")
-      && !text.includes("]]");
+      && !text.includes("[")
+      && !text.includes("]");
   }
 }
 

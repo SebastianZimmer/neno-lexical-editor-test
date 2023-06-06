@@ -1,5 +1,4 @@
 import {
-  $createParagraphNode,
   $createTextNode,
   $getRoot,
   CLEAR_HISTORY_COMMAND,
@@ -11,7 +10,6 @@ import './App.css';
 import './ibm-plex-mono.css';
 
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
-import {PlainTextPlugin} from '@lexical/react/LexicalPlainTextPlugin';
 import {ContentEditable} from '@lexical/react/LexicalContentEditable';
 import {NodeEventPlugin} from '@lexical/react/LexicalNodeEventPlugin';
 import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
@@ -29,6 +27,10 @@ import { WikiLinkPlugin } from './plugins/WikilinkPlugin';
 import { WikiLinkPunctuationNode } from './nodes/WikiLinkPunctuationNode';
 import { BoldNode } from './nodes/BoldNode';
 import { BoldPlugin } from './plugins/BoldPlugin';
+import { TransclusionNode } from './nodes/TransclusionNode';
+import SubtextNode, { $createSubtextNode } from './nodes/SubtextNode';
+import TransclusionPlugin from './plugins/TransclusionPlugin';
+import { SubtextPlugin } from './plugins/SubtextPlugin';
 
 const theme = {
   ltr: 'ltr',
@@ -41,6 +43,7 @@ const theme = {
   wikiLinkPunctuation: 'wikilink-punctuation',
   wikiLinkContent: 'wikilink-content',
   bold: 'bold',
+  subtext: 'subtext',
 }
 
 
@@ -74,8 +77,7 @@ const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
       // Get the RootNode from the EditorState
       const root = $getRoot();
       root.clear();
-      // Create a new ParagraphNode
-      const paragraphNode = $createParagraphNode();
+      const subtextNode = $createSubtextNode();
 
       // Create a new TextNode
       const textNode = $createTextNode(text);
@@ -85,12 +87,13 @@ const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
       // https://lexical.dev/docs/concepts/transforms
       textNode.markDirty();
 
-      // Append the text node to the paragraph
-      paragraphNode.append(textNode);
-
-      // Finally, append the paragraph to the root
-      root.append(paragraphNode);
+      subtextNode.append(textNode);
+      root.append(subtextNode);
       editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
+
+      // go inside the first paragraph node (this prevents creating another
+      // paragraph node when pressing enter immediately after load)
+      subtextNode.selectStart();
     });
   }, [editor, text]);
 
@@ -109,6 +112,8 @@ export const App = () => {
       WikiLinkContentNode,
       WikiLinkPunctuationNode,
       BoldNode,
+      TransclusionNode,
+      SubtextNode,
     ],
   };
 
@@ -130,9 +135,9 @@ There is also some *bold text* a #hashtag.`,
     <>
       <h1>Subtext Web Editor PoC</h1>
       <LexicalComposer initialConfig={initialConfig}>
-        <PlainTextPlugin
-          contentEditable={<ContentEditable />}
+        <SubtextPlugin
           placeholder={null}
+          contentEditable={<ContentEditable />}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <PlainTextStateExchangePlugin text={text}/>
@@ -152,6 +157,7 @@ There is also some *bold text* a #hashtag.`,
         <HeadingPlugin />
         <LinkPlugin />
         <WikiLinkPlugin />
+        <TransclusionPlugin />
         <NodeEventPlugin
           nodeType={AutoLinkNode}
           eventType='click'

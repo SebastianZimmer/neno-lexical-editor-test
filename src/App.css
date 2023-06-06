@@ -127,3 +127,10 @@ div[data-lexical-editor] > p {
 .bold {
   font-weight: bold;
 }
+
+.transclusion {
+  background-color: var(--background-color);
+  border-radius: 7px;
+  padding: 5px;
+  margin: 10px;
+}

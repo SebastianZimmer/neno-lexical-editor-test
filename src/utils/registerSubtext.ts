@@ -202,21 +202,23 @@ export function registerSubtext(editor: LexicalEditor): () => void {
           return false;
         }
 
-        selection.insertLineBreak(selectStart);
+        selection.removeText();
+        selection.insertParagraph();
         return true;
       },
       COMMAND_PRIORITY_EDITOR,
     ),
     editor.registerCommand(
       INSERT_PARAGRAPH_COMMAND,
-      () => {
+      () => { console.log("IPC")
         const selection = $getSelection();
 
         if (!$isRangeSelection(selection)) {
           return false;
         }
 
-        selection.insertLineBreak(); // TODO: insert new block node
+        selection.removeText();
+        selection.insertParagraph();
         return true;
       },
       COMMAND_PRIORITY_EDITOR,

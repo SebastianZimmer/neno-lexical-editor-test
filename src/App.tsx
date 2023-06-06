@@ -1,4 +1,5 @@
 import {
+  $createParagraphNode,
   $createTextNode,
   $getRoot,
   CLEAR_HISTORY_COMMAND,
@@ -28,7 +29,6 @@ import { WikiLinkPunctuationNode } from './nodes/WikiLinkPunctuationNode';
 import { BoldNode } from './nodes/BoldNode';
 import { BoldPlugin } from './plugins/BoldPlugin';
 import { TransclusionNode } from './nodes/TransclusionNode';
-import SubtextNode, { $createSubtextNode } from './nodes/SubtextNode';
 import TransclusionPlugin from './plugins/TransclusionPlugin';
 import { SubtextPlugin } from './plugins/SubtextPlugin';
 
@@ -69,6 +69,14 @@ function onError(error: unknown) {
   console.error(error);
 }
 
+/*
+Convention:
+Every subtext block is rendered as a normal editor ParagraphNode.
+We cannot extend ParagraphNode to some BlockNode, because then we cannot make
+use of RangeSelection.insertParagraph(). RangeSelection.insertNodes([blockNode])
+works differently.
+*/
+
 const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
   const [editor] = useLexicalComposerContext();
 
@@ -77,28 +85,37 @@ const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
       // Get the RootNode from the EditorState
       const root = $getRoot();
       root.clear();
-      const subtextNode = $createSubtextNode();
 
-      // Create a new TextNode
-      const textNode = $createTextNode(text);
+      const blocks = text.split("\n");
+      blocks.forEach((blockText: string) => {
+        const blockNode = $createParagraphNode();
 
-      // after setting the state, we need to mark the text node dirty, because
-      // it is not transformed yet by the registered node transforms
-      // https://lexical.dev/docs/concepts/transforms
-      textNode.markDirty();
+        // Create a new TextNode
+        const textNode = $createTextNode(blockText);
+  
+        // after setting the state, we need to mark the text node dirty, because
+        // it is not transformed yet by the registered node transforms
+        // https://lexical.dev/docs/concepts/transforms
+        textNode.markDirty();
+  
+        blockNode.append(textNode);
+        root.append(blockNode);
+      })
 
-      subtextNode.append(textNode);
-      root.append(subtextNode);
       editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
 
       // go inside the first paragraph node (this prevents creating another
       // paragraph node when pressing enter immediately after load)
-      subtextNode.selectStart();
+      root.getFirstChild()?.selectStart();
     });
   }, [editor, text]);
 
   return null;
 }
+
+// TODO: change font to normal Non-monospace
+// TODO: add linter to project
+// TODO: refresh block transclusions on slashlink change
 
 export const App = () => {
   const initialConfig = {
@@ -113,7 +130,6 @@ export const App = () => {
       WikiLinkPunctuationNode,
       BoldNode,
       TransclusionNode,
-      SubtextNode,
     ],
   };
 

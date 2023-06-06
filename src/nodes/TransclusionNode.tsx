@@ -1,7 +1,8 @@
 import { DecoratorNode, EditorConfig, LexicalNode, NodeKey, SerializedLexicalNode } from "lexical";
+import { ReactNode } from "react";
 
 
-export class TransclusionNode extends DecoratorNode<HTMLDivElement> {
+export class TransclusionNode extends DecoratorNode<ReactNode> {
   static getType(): string {
     return 'transclusion';
   }
@@ -17,18 +18,22 @@ export class TransclusionNode extends DecoratorNode<HTMLDivElement> {
     this.__link = link;
   }
 
-  decorate() {
-    const div = document.createElement("div");
-    div.innerHTML = "Transclusion node for " + this.__link;
-    return div;
+  decorate(): ReactNode {
+    return <div>
+      Transclusion node for {this.__link}
+    </div>;
   }
 
   // View
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(config: EditorConfig): HTMLDivElement {
     const div = document.createElement("div");
-    div.innerHTML = "Transclusion node for " + this.__link;
-    div.style.border = "1px solid lime";
+    div.classList.add("transclusion");
     return div;
+  }
+
+
+  updateDOM(): false {
+    return false;
   }
 
   exportJSON(): SerializedLexicalNode {
@@ -44,7 +49,7 @@ export function $createTransclusionNode(link: string): TransclusionNode {
   return new TransclusionNode(link);
 }
 
-export function $isVideoNode(
+export function $isTransclusionNode(
   node: LexicalNode | null | undefined,
 ): node is TransclusionNode {
   return node instanceof TransclusionNode;

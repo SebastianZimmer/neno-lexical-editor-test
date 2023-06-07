@@ -75,13 +75,12 @@ body,
   padding: 10px;
   background-color: var(--background-color);
   color: var(--main-content-color);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: "IBM Plex Sans";
   text-align: center;
 }
 
 div[data-lexical-editor] {
   max-width: 750px;
-  font-family: "IBM Plex Mono", monospace;
   font-size: 18px;
   margin: auto;
   border-radius: 7px;

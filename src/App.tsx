@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react";
 
 import "./App.css";
-import "./ibm-plex-mono.css";
+import "./ibm-plex-sans.css";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -114,8 +114,6 @@ const PlainTextStateExchangePlugin = ({ text }: { text: string }) => {
 
   return null;
 };
-
-// TODO: change font to normal Non-monospace
 
 export const App = () => {
   const initialConfig = {

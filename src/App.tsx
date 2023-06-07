@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
 import {
-  $createParagraphNode,
-  $createTextNode,
   $getRoot,
   CLEAR_HISTORY_COMMAND,
   EditorState,
@@ -34,6 +32,8 @@ import { BoldPlugin } from "./plugins/BoldPlugin";
 import { TransclusionNode } from "./nodes/TransclusionNode";
 import TransclusionPlugin from "./plugins/TransclusionPlugin";
 import { SubtextPlugin } from "./plugins/SubtextPlugin";
+import setSubtext from "./utils/setSubtext";
+import getSubtextFromEditor from "./utils/getSubtextFromEditor";
 
 const theme = {
   ltr: "ltr",
@@ -85,28 +85,9 @@ const PlainTextStateExchangePlugin = ({ text }: { text: string }) => {
 
   useEffect(() => {
     editor.update(() => {
-      // Get the RootNode from the EditorState
       const root = $getRoot();
-      root.clear();
-
-      const blocks = text.split("\n");
-      blocks.forEach((blockText: string) => {
-        const blockNode = $createParagraphNode();
-
-        // Create a new TextNode
-        const textNode = $createTextNode(blockText);
-
-        // after setting the state, we need to mark the text node dirty, because
-        // it is not transformed yet by the registered node transforms
-        // https://lexical.dev/docs/concepts/transforms
-        textNode.markDirty();
-
-        blockNode.append(textNode);
-        root.append(blockNode);
-      });
-
+      setSubtext(root, text);
       editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
-
       // go inside the first paragraph node (this prevents creating another
       // paragraph node when pressing enter immediately after load)
       root.getFirstChild()?.selectStart();
@@ -137,7 +118,7 @@ export const App = () => {
     `This is an example note. Feel free to edit it.
 
 # Gardening counterintuitive ideas
-We should take special care of *counterintuitive ideas* when gardening them. Kenneth Stanley talks in https://overcast.fm/+OxebA5HTY about /counterintuitive-ideas 
+We should take special care of *counterintuitive ideas* when gardening them. Kenneth Stanley talks in https://overcast.fm/+OxebA5HTY about /counterintuitive-ideas
 Ben Follington has an inspiring /guide-to-gardening-ideas 
 
 #ideas`,
@@ -163,7 +144,7 @@ Ben Follington has an inspiring /guide-to-gardening-ideas
             editorState.read(() => {
               // Read the contents of the EditorState here.
               const root = $getRoot();
-              setCurrentEditorText(root.getTextContent());
+              setCurrentEditorText(getSubtextFromEditor(root));
             });
           }
         } />

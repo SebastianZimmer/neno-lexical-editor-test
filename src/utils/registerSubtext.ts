@@ -7,7 +7,7 @@
  *
  */
 
-import type { CommandPayloadType, LexicalEditor } from "lexical";
+import { $getRoot, CommandPayloadType, LexicalEditor } from "lexical";
 
 import {
   $getHtmlContent,
@@ -46,6 +46,8 @@ import {
   IS_IOS,
   IS_SAFARI,
 } from "./environment";
+import setSubtext from "./setSubtext";
+import getSubtextFromEditor from "./getSubtextFromEditor";
 
 function onCopyForPlainText(
   event: CommandPayloadType<typeof COPY_COMMAND>,
@@ -69,6 +71,7 @@ function onCopyForPlainText(
   });
 }
 
+
 function onPasteForPlainText(
   event: CommandPayloadType<typeof PASTE_COMMAND>,
   editor: LexicalEditor,
@@ -83,7 +86,9 @@ function onPasteForPlainText(
           : event.clipboardData;
 
       if (clipboardData !== null && $isRangeSelection(selection)) {
+        const root = $getRoot();
         $insertDataTransferForPlainText(clipboardData, selection);
+        setSubtext(root, getSubtextFromEditor(root));
       }
     },
     {
@@ -195,7 +200,6 @@ export function registerSubtext(editor: LexicalEditor): () => void {
     ),
     editor.registerCommand<boolean>(
       INSERT_LINE_BREAK_COMMAND,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       () => {
         // There is a selectStart argument passed to this function which can
         // be used

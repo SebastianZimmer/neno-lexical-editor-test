@@ -132,6 +132,7 @@ div[data-lexical-editor] > p {
   border-radius: 7px;
   padding: 10px;
   margin: 10px;
+  cursor: pointer;
 }
 
 .transclusion p {

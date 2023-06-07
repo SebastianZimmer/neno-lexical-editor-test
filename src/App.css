@@ -84,7 +84,7 @@ div[data-lexical-editor] {
   font-size: 18px;
   margin: auto;
   border-radius: 7px;
-  padding: 5px;
+  padding: 10px;
   min-height: 350px;
 
   background: var(--accent-color-interactible);
@@ -130,6 +130,14 @@ div[data-lexical-editor] > p {
 .transclusion {
   background-color: var(--background-color);
   border-radius: 7px;
-  padding: 5px;
+  padding: 10px;
   margin: 10px;
+}
+
+.transclusion p {
+  margin: 0;
+}
+
+.transclusion p.slug {
+  color: var(--alt-content-color);
 }

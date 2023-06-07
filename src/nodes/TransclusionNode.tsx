@@ -5,6 +5,7 @@ import {
   SerializedLexicalNode,
 } from "lexical";
 import { ReactNode } from "react";
+import transclusions from "../transclusions";
 
 
 export class TransclusionNode extends DecoratorNode<ReactNode> {
@@ -25,7 +26,8 @@ export class TransclusionNode extends DecoratorNode<ReactNode> {
 
   decorate(): ReactNode {
     return <div>
-      Transclusion for {this.__link}
+      <p>{transclusions.get(this.__link.substring(1))}</p>
+      <p className="slug">{this.__link}</p>
     </div>;
   }
 

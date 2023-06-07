@@ -196,7 +196,9 @@ export function registerSubtext(editor: LexicalEditor): () => void {
     editor.registerCommand<boolean>(
       INSERT_LINE_BREAK_COMMAND,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      (selectStart) => {
+      () => {
+        // There is a selectStart argument passed to this function which can
+        // be used
         const selection = $getSelection();
 
         if (!$isRangeSelection(selection)) {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   $createParagraphNode,
   $createTextNode,
@@ -115,6 +116,7 @@ const PlainTextStateExchangePlugin = ({ text }: { text: string }) => {
   return null;
 };
 
+
 export const App = () => {
   const initialConfig = {
     namespace: "MyEditor",
@@ -132,13 +134,13 @@ export const App = () => {
   };
 
   const [notes, setNotes] = useState([
-    `This is an example note.
+    `This is an example note. Feel free to edit it.
 
-# Heading
-It contains a weblink to https://en.wikipedia.org
-It also contains a /slashlink, an @external/slashlink and a [[Wikilink]]. \
-Pointer events with those targets can be handled with custom event handlers.
-There is also some *bold text* a #hashtag.`,
+# Gardening counterintuitive ideas
+We should take special care of *counterintuitive ideas* when gardening them. Kenneth Stanley talks in https://overcast.fm/+OxebA5HTY about /counterintuitive-ideas 
+Ben Follington has an inspiring /guide-to-gardening-ideas 
+
+#ideas`,
     "Note 2 text",
   ]);
 

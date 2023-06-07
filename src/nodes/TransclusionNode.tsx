@@ -25,7 +25,7 @@ export class TransclusionNode extends DecoratorNode<ReactNode> {
 
   decorate(): ReactNode {
     return <div>
-      Transclusion node for {this.__link}
+      Transclusion for {this.__link}
     </div>;
   }
 

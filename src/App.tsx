@@ -116,8 +116,6 @@ const PlainTextStateExchangePlugin = ({ text }: { text: string }) => {
 };
 
 // TODO: change font to normal Non-monospace
-// TODO: add linter to project
-// TODO: refresh block transclusions on slashlink change
 
 export const App = () => {
   const initialConfig = {

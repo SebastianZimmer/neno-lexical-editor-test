@@ -10,14 +10,14 @@ import type {
   EditorConfig,
   LexicalNode,
   SerializedTextNode,
-} from 'lexical';
+} from "lexical";
 
-import {addClassNamesToElement} from '@lexical/utils';
-import {$applyNodeReplacement, TextNode} from 'lexical';
+import { addClassNamesToElement } from "@lexical/utils";
+import { $applyNodeReplacement, TextNode } from "lexical";
 
 export class WikiLinkContentNode extends TextNode {
   static getType(): string {
-    return 'wikiLinkContent';
+    return "wikiLinkContent";
   }
 
   static clone(node: WikiLinkContentNode): WikiLinkContentNode {
@@ -58,7 +58,7 @@ export class WikiLinkContentNode extends TextNode {
   exportJSON(): SerializedTextNode {
     return {
       ...super.exportJSON(),
-      type: 'wikiLinkContent',
+      type: "wikiLinkContent",
     };
   }
 
@@ -70,20 +70,11 @@ export class WikiLinkContentNode extends TextNode {
   }
 }
 
-/**
- * Generates a WikiLinkContentNode, which is a string following the format of a # followed by some text, eg. #lexical.
- * @param text - The text used inside the WikiLinkContentNode.
- * @returns - The WikiLinkContentNode with the embedded text.
- */
-export function $createWikiLinkContentNode(text = ''): WikiLinkContentNode {
+
+export function $createWikiLinkContentNode(text = ""): WikiLinkContentNode {
   return $applyNodeReplacement(new WikiLinkContentNode(text));
 }
 
-/**
- * Determines if node is a WikiLinkContentNode.
- * @param node - The node to be checked.
- * @returns true if node is a WikiLinkContentNode, false otherwise.
- */
 export function $isWikiLinkContentNode(
   node: LexicalNode | null | undefined,
 ): node is WikiLinkContentNode {

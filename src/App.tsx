@@ -4,47 +4,49 @@ import {
   $getRoot,
   CLEAR_HISTORY_COMMAND,
   EditorState,
-} from 'lexical';
-import {useEffect, useState} from 'react';
+} from "lexical";
+import { useEffect, useState } from "react";
 
-import './App.css';
-import './ibm-plex-mono.css';
+import "./App.css";
+import "./ibm-plex-mono.css";
 
-import {LexicalComposer} from '@lexical/react/LexicalComposer';
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
-import {NodeEventPlugin} from '@lexical/react/LexicalNodeEventPlugin';
-import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
-import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import { HashtagNode } from './nodes/HashtagNode';
-import { HeadingNode } from './nodes/HeadingNode';
-import { HashtagPlugin } from './plugins/HashtagPlugin';
-import { HeadingPlugin } from './plugins/HeadingPlugin';
-import LinkPlugin from './plugins/LinkPlugin';
-import { AutoLinkNode } from '@lexical/link';
-import { WikiLinkContentNode } from './nodes/WikiLinkContentNode';
-import { WikiLinkPlugin } from './plugins/WikilinkPlugin';
-import { WikiLinkPunctuationNode } from './nodes/WikiLinkPunctuationNode';
-import { BoldNode } from './nodes/BoldNode';
-import { BoldPlugin } from './plugins/BoldPlugin';
-import { TransclusionNode } from './nodes/TransclusionNode';
-import TransclusionPlugin from './plugins/TransclusionPlugin';
-import { SubtextPlugin } from './plugins/SubtextPlugin';
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { NodeEventPlugin } from "@lexical/react/LexicalNodeEventPlugin";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import {
+  useLexicalComposerContext,
+} from "@lexical/react/LexicalComposerContext";
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import { HashtagNode } from "./nodes/HashtagNode";
+import { HeadingNode } from "./nodes/HeadingNode";
+import { HashtagPlugin } from "./plugins/HashtagPlugin";
+import { HeadingPlugin } from "./plugins/HeadingPlugin";
+import LinkPlugin from "./plugins/LinkPlugin";
+import { AutoLinkNode } from "@lexical/link";
+import { WikiLinkContentNode } from "./nodes/WikiLinkContentNode";
+import { WikiLinkPlugin } from "./plugins/WikilinkPlugin";
+import { WikiLinkPunctuationNode } from "./nodes/WikiLinkPunctuationNode";
+import { BoldNode } from "./nodes/BoldNode";
+import { BoldPlugin } from "./plugins/BoldPlugin";
+import { TransclusionNode } from "./nodes/TransclusionNode";
+import TransclusionPlugin from "./plugins/TransclusionPlugin";
+import { SubtextPlugin } from "./plugins/SubtextPlugin";
 
 const theme = {
-  ltr: 'ltr',
-  rtl: 'rtl',
-  placeholder: 'editor-placeholder',
-  paragraph: 'editor-paragraph',
-  hashtag: 'hashtag',
-  link: 'link',
-  s_heading: 's_heading', // heading seems to be a reserved word
-  wikiLinkPunctuation: 'wikilink-punctuation',
-  wikiLinkContent: 'wikilink-content',
-  bold: 'bold',
-  subtext: 'subtext',
-}
+  ltr: "ltr",
+  rtl: "rtl",
+  placeholder: "editor-placeholder",
+  paragraph: "editor-paragraph",
+  hashtag: "hashtag",
+  link: "link",
+  s_heading: "s_heading", // heading seems to be a reserved word
+  wikiLinkPunctuation: "wikilink-punctuation",
+  wikiLinkContent: "wikilink-content",
+  bold: "bold",
+  subtext: "subtext",
+};
 
 
 // Lexical React plugins are React components, which makes them
@@ -77,7 +79,7 @@ use of RangeSelection.insertParagraph(). RangeSelection.insertNodes([blockNode])
 works differently.
 */
 
-const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
+const PlainTextStateExchangePlugin = ({ text }: { text: string }) => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
@@ -92,15 +94,15 @@ const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
 
         // Create a new TextNode
         const textNode = $createTextNode(blockText);
-  
+
         // after setting the state, we need to mark the text node dirty, because
         // it is not transformed yet by the registered node transforms
         // https://lexical.dev/docs/concepts/transforms
         textNode.markDirty();
-  
+
         blockNode.append(textNode);
         root.append(blockNode);
-      })
+      });
 
       editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
 
@@ -111,7 +113,7 @@ const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
   }, [editor, text]);
 
   return null;
-}
+};
 
 // TODO: change font to normal Non-monospace
 // TODO: add linter to project
@@ -119,7 +121,7 @@ const PlainTextStateExchangePlugin = ({text}: {text: string}) => {
 
 export const App = () => {
   const initialConfig = {
-    namespace: 'MyEditor', 
+    namespace: "MyEditor",
     theme,
     onError,
     nodes: [
@@ -138,9 +140,10 @@ export const App = () => {
 
 # Heading
 It contains a weblink to https://en.wikipedia.org
-It also contains a /slashlink, an @external/slashlink and a [[Wikilink]]. Pointer events with those targets can be handled with custom event handlers.
+It also contains a /slashlink, an @external/slashlink and a [[Wikilink]]. \
+Pointer events with those targets can be handled with custom event handlers.
 There is also some *bold text* a #hashtag.`,
-"Note 2 text",
+    "Note 2 text",
   ]);
 
   const [activeNoteIndex, setActiveNoteIndex] = useState(0);
@@ -176,14 +179,15 @@ There is also some *bold text* a #hashtag.`,
         <TransclusionPlugin />
         <NodeEventPlugin
           nodeType={AutoLinkNode}
-          eventType='click'
+          eventType="click"
           eventListener={(e: Event) => {
             const isSlashlink = (str: string) => {
               return str.startsWith("@") || str.startsWith("/");
-            }
+            };
             if (!(e && e.target)) return;
             const link = (e.target as HTMLElement).innerText;
             if (isSlashlink(link)) {
+              // eslint-disable-next-line no-console
               console.log("Click on slashlink: " + link);
             } else {
               window.open(link);
@@ -212,4 +216,4 @@ There is also some *bold text* a #hashtag.`,
       >Save active note</button>
     </>
   );
-}
+};

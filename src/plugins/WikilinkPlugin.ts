@@ -12,17 +12,23 @@ import {
   $isTextNode,
   LexicalEditor,
   TextNode,
-} from 'lexical';
-import { EntityMatch } from '@lexical/text';
+} from "lexical";
+import { EntityMatch } from "@lexical/text";
 import {
   $createWikiLinkContentNode,
   $isWikiLinkContentNode,
   WikiLinkContentNode,
-} from '../nodes/WikiLinkContentNode';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {useEffect} from 'react';
-import {mergeRegister} from '@lexical/utils';
-import { $createWikiLinkPunctuationNode, $isWikiLinkPunctuationNode, WikiLinkPunctuationNode } from '../nodes/WikiLinkPunctuationNode';
+} from "../nodes/WikiLinkContentNode";
+import {
+  useLexicalComposerContext,
+} from "@lexical/react/LexicalComposerContext";
+import { useEffect } from "react";
+import { mergeRegister } from "@lexical/utils";
+import {
+  $createWikiLinkPunctuationNode,
+  $isWikiLinkPunctuationNode,
+  WikiLinkPunctuationNode,
+} from "../nodes/WikiLinkPunctuationNode";
 
 
 const getWikiLinkMatch = (text: string): EntityMatch | null => {
@@ -61,13 +67,13 @@ function registerWikilinkTransforms(
     let currentNode = node;
     let match: EntityMatch | null;
 
-    // eslint-disable-next-line no-constant-condition
+
     while (true) {
       match = getWikiLinkMatch(text);
-      const nextText = match === null ? '' : text.slice(match.end);
+      const nextText = match === null ? "" : text.slice(match.end);
       text = nextText;
 
-      if (nextText !== '') {
+      if (nextText !== "") {
         const nextMatch = getWikiLinkMatch(nextText);
 
         if (nextMatch !== null && nextMatch.start === 0) {
@@ -80,9 +86,9 @@ function registerWikilinkTransforms(
       }
 
       if (
-        match.start === 0 &&
-        $isTextNode(prevSibling) &&
-        prevSibling.isTextEntity()
+        match.start === 0
+        && $isTextNode(prevSibling)
+        && prevSibling.isTextEntity()
       ) {
         continue;
       }
@@ -128,7 +134,9 @@ function registerWikilinkTransforms(
       if (!isNaN(selectionOffset)) {
         if (selectionOffset < 3) {
           replacementNode1.select(selectionOffset, selectionOffset);
-        } else if (selectionOffset > nodeToReplace.getTextContent().length - 2) {
+        } else if (
+          selectionOffset > nodeToReplace.getTextContent().length - 2
+        ) {
           const newNodeOffset
             = selectionOffset - replacementNode2.getTextContent().length - 2;
           replacementNode3.select(newNodeOffset, newNodeOffset);
@@ -142,7 +150,7 @@ function registerWikilinkTransforms(
   };
 
   const reverseWikilinkContentNodeTransform = (
-    node: WikiLinkContentNode
+    node: WikiLinkContentNode,
   ) => {
     if (!node.getParent()) return;
     // check if punctuation and content is still intact
@@ -172,7 +180,7 @@ function registerWikilinkTransforms(
 
 
   const reverseWikilinkPunctuationNodeTransform = (
-    node: WikiLinkPunctuationNode
+    node: WikiLinkPunctuationNode,
   ) => {
     // check if punctuation and content is still intact
     // if not: transform back to simple text node
@@ -180,7 +188,7 @@ function registerWikilinkTransforms(
 
     const hasAccompanyingContentNode = node.__isClosing
       ? $isWikiLinkContentNode(node.getPreviousSibling())
-      : $isWikiLinkContentNode(node.getNextSibling())
+      : $isWikiLinkContentNode(node.getNextSibling());
 
     if (!node.isValid() || (!hasAccompanyingContentNode)) {
       replaceWithSimpleText(node);
@@ -214,7 +222,6 @@ function registerWikilinkTransforms(
 }
 
 
-
 const REGEX = /\[\[[^[\]]+\]\]/;
 
 export function WikiLinkPlugin(): JSX.Element | null {
@@ -222,7 +229,7 @@ export function WikiLinkPlugin(): JSX.Element | null {
 
   useEffect(() => {
     if (!editor.hasNodes([WikiLinkContentNode, WikiLinkPunctuationNode])) {
-      throw new Error('WikiLinkPlugin: WikiLinkNodes not registered on editor');
+      throw new Error("WikiLinkPlugin: WikiLinkNodes not registered on editor");
     }
 
     return mergeRegister(

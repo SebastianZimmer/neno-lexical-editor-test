@@ -1,10 +1,15 @@
-import { DecoratorNode, EditorConfig, LexicalNode, NodeKey, SerializedLexicalNode } from "lexical";
+import {
+  DecoratorNode,
+  LexicalNode,
+  NodeKey,
+  SerializedLexicalNode,
+} from "lexical";
 import { ReactNode } from "react";
 
 
 export class TransclusionNode extends DecoratorNode<ReactNode> {
   static getType(): string {
-    return 'transclusion';
+    return "transclusion";
   }
 
   static clone(node: TransclusionNode): TransclusionNode {
@@ -24,8 +29,7 @@ export class TransclusionNode extends DecoratorNode<ReactNode> {
     </div>;
   }
 
-  // View
-  createDOM(config: EditorConfig): HTMLDivElement {
+  createDOM(): HTMLDivElement {
     const div = document.createElement("div");
     div.classList.add("transclusion");
     return div;
@@ -34,6 +38,10 @@ export class TransclusionNode extends DecoratorNode<ReactNode> {
 
   updateDOM(): false {
     return false;
+  }
+
+  importJSON() {
+    return;
   }
 
   exportJSON(): SerializedLexicalNode {

@@ -10,10 +10,10 @@ import type {
   EditorConfig,
   LexicalNode,
   SerializedTextNode,
-} from 'lexical';
+} from "lexical";
 
-import {addClassNamesToElement} from '@lexical/utils';
-import {$applyNodeReplacement, TextNode} from 'lexical';
+import { addClassNamesToElement } from "@lexical/utils";
+import { $applyNodeReplacement, TextNode } from "lexical";
 
 
 interface SerializedWikiLinkPunctuationNode extends SerializedTextNode {
@@ -22,7 +22,7 @@ interface SerializedWikiLinkPunctuationNode extends SerializedTextNode {
 
 export class WikiLinkPunctuationNode extends TextNode {
   static getType(): string {
-    return 'wikiLinkPunctuation';
+    return "wikiLinkPunctuation";
   }
 
   static clone(node: WikiLinkPunctuationNode): WikiLinkPunctuationNode {
@@ -75,25 +75,19 @@ export class WikiLinkPunctuationNode extends TextNode {
   exportJSON(): SerializedTextNode {
     return {
       ...super.exportJSON(),
-      type: 'wikiLinkPunctuation',
+      type: "wikiLinkPunctuation",
     };
   }
 }
 
-/**
- * Generates a WikiLinkPunctuationNode, which is a string following the format of a # followed by some text, eg. #lexical.
- * @param text - The text used inside the WikiLinkPunctuationNode.
- * @returns - The WikiLinkPunctuationNode with the embedded text.
- */
-export function $createWikiLinkPunctuationNode(isClosing: boolean): WikiLinkPunctuationNode {
+
+export function $createWikiLinkPunctuationNode(
+  isClosing: boolean,
+): WikiLinkPunctuationNode {
   return $applyNodeReplacement(new WikiLinkPunctuationNode(isClosing));
 }
 
-/**
- * Determines if node is a WikiLinkPunctuationNode.
- * @param node - The node to be checked.
- * @returns true if node is a WikiLinkPunctuationNode, false otherwise.
- */
+
 export function $isWikiLinkPunctuationNode(
   node: LexicalNode | null | undefined,
 ): node is WikiLinkPunctuationNode {

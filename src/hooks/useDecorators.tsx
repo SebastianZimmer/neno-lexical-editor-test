@@ -6,12 +6,12 @@
  *
  */
 
-import type {LexicalEditor} from 'lexical';
+import type { LexicalEditor } from "lexical";
 
-import {Suspense, useEffect, useMemo, useState} from 'react';
-import * as React from 'react';
-import {createPortal, flushSync} from 'react-dom';
-import useLayoutEffect from './useLayoutEffect';
+import { Suspense, useEffect, useMemo, useState } from "react";
+import * as React from "react";
+import { createPortal, flushSync } from "react-dom";
+import useLayoutEffect from "./useLayoutEffect";
 
 type ErrorBoundaryProps = {
   children: JSX.Element;

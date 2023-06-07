@@ -11,15 +11,15 @@ import type {
   LexicalNode,
   NodeKey,
   SerializedTextNode,
-} from 'lexical';
+} from "lexical";
 
-import {addClassNamesToElement} from '@lexical/utils';
-import {$applyNodeReplacement, TextNode} from 'lexical';
+import { addClassNamesToElement } from "@lexical/utils";
+import { $applyNodeReplacement, TextNode } from "lexical";
 
 /** @noInheritDoc */
 export class BoldNode extends TextNode {
   static getType(): string {
-    return 'bold';
+    return "bold";
   }
 
   static clone(node: BoldNode): BoldNode {
@@ -48,7 +48,7 @@ export class BoldNode extends TextNode {
   exportJSON(): SerializedTextNode {
     return {
       ...super.exportJSON(),
-      type: 'bold',
+      type: "bold",
     };
   }
 
@@ -61,20 +61,12 @@ export class BoldNode extends TextNode {
   }
 }
 
-/**
- * Generates a BoldNode, which is a string following the format of a # followed by some text, eg. #lexical.
- * @param text - The text used inside the BoldNode.
- * @returns - The BoldNode with the embedded text.
- */
-export function $createBoldNode(text = ''): BoldNode {
+
+export function $createBoldNode(text = ""): BoldNode {
   return $applyNodeReplacement(new BoldNode(text));
 }
 
-/**
- * Determines if node is a BoldNode.
- * @param node - The node to be checked.
- * @returns true if node is a BoldNode, false otherwise.
- */
+
 export function $isBoldNode(
   node: LexicalNode | null | undefined,
 ): node is BoldNode {

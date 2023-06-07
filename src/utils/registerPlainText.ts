@@ -7,17 +7,17 @@
  *
  */
 
-import type {CommandPayloadType, LexicalEditor} from 'lexical';
+import type { CommandPayloadType, LexicalEditor } from "lexical";
 
 import {
   $getHtmlContent,
   $insertDataTransferForPlainText,
-} from '@lexical/clipboard';
+} from "@lexical/clipboard";
 import {
   $moveCharacter,
   $shouldOverrideDefaultCharacterSelection,
-} from '@lexical/selection';
-import {mergeRegister} from '@lexical/utils';
+} from "@lexical/selection";
+import { mergeRegister } from "@lexical/utils";
 import {
   $getSelection,
   $isRangeSelection,
@@ -39,32 +39,32 @@ import {
   KEY_ENTER_COMMAND,
   PASTE_COMMAND,
   REMOVE_TEXT_COMMAND,
-} from 'lexical';
+} from "lexical";
 import {
   CAN_USE_BEFORE_INPUT,
   IS_APPLE_WEBKIT,
   IS_IOS,
   IS_SAFARI,
-} from './environment';
+} from "./environment";
 
 function onCopyForPlainText(
   event: CommandPayloadType<typeof COPY_COMMAND>,
   editor: LexicalEditor,
 ): void {
   editor.update(() => {
-    const clipboardData =
-      event instanceof KeyboardEvent ? null : event.clipboardData;
+    const clipboardData
+      = event instanceof KeyboardEvent ? null : event.clipboardData;
     const selection = $getSelection();
 
-    if (selection !== null && clipboardData != null) {
+    if (selection !== null && clipboardData !== null) {
       event.preventDefault();
       const htmlString = $getHtmlContent(editor);
 
       if (htmlString !== null) {
-        clipboardData.setData('text/html', htmlString);
+        clipboardData.setData("text/html", htmlString);
       }
 
-      clipboardData.setData('text/plain', selection.getTextContent());
+      clipboardData.setData("text/plain", selection.getTextContent());
     }
   });
 }
@@ -77,17 +77,17 @@ function onPasteForPlainText(
   editor.update(
     () => {
       const selection = $getSelection();
-      const clipboardData =
-        event instanceof InputEvent || event instanceof KeyboardEvent
+      const clipboardData
+        = event instanceof InputEvent || event instanceof KeyboardEvent
           ? null
           : event.clipboardData;
 
-      if (clipboardData != null && $isRangeSelection(selection)) {
+      if (clipboardData !== null && $isRangeSelection(selection)) {
         $insertDataTransferForPlainText(clipboardData, selection);
       }
     },
     {
-      tag: 'paste',
+      tag: "paste",
     },
   );
 }
@@ -159,12 +159,12 @@ export function registerPlainText(editor: LexicalEditor): () => void {
           return false;
         }
 
-        if (typeof eventOrText === 'string') {
+        if (typeof eventOrText === "string") {
           selection.insertText(eventOrText);
         } else {
           const dataTransfer = eventOrText.dataTransfer;
 
-          if (dataTransfer != null) {
+          if (dataTransfer !== null) {
             $insertDataTransferForPlainText(dataTransfer, selection);
           } else {
             const data = eventOrText.data;
@@ -311,8 +311,8 @@ export function registerPlainText(editor: LexicalEditor): () => void {
           // Safari, where there is a noticeable pause due to
           // preventing the key down of enter.
           if (
-            (IS_IOS || IS_SAFARI || IS_APPLE_WEBKIT) &&
-            CAN_USE_BEFORE_INPUT
+            (IS_IOS || IS_SAFARI || IS_APPLE_WEBKIT)
+            && CAN_USE_BEFORE_INPUT
           ) {
             return false;
           }

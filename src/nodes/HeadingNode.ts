@@ -11,15 +11,15 @@ import type {
   LexicalNode,
   NodeKey,
   SerializedTextNode,
-} from 'lexical';
+} from "lexical";
 
-import {addClassNamesToElement} from '@lexical/utils';
-import {$applyNodeReplacement, TextNode} from 'lexical';
+import { addClassNamesToElement } from "@lexical/utils";
+import { $applyNodeReplacement, TextNode } from "lexical";
 
 /** @noInheritDoc */
 export class HeadingNode extends TextNode {
   static getType(): string {
-    return 'heading';
+    return "heading";
   }
 
   static clone(node: HeadingNode): HeadingNode {
@@ -48,7 +48,7 @@ export class HeadingNode extends TextNode {
   exportJSON(): SerializedTextNode {
     return {
       ...super.exportJSON(),
-      type: 'heading',
+      type: "heading",
     };
   }
 
@@ -61,20 +61,12 @@ export class HeadingNode extends TextNode {
   }
 }
 
-/**
- * Generates a HeadingNode, which is a string following the format of a # followed by some text, eg. #lexical.
- * @param text - The text used inside the HeadingNode.
- * @returns - The HeadingNode with the embedded text.
- */
-export function $createHeadingNode(text = ''): HeadingNode {
+
+export function $createHeadingNode(text = ""): HeadingNode {
   return $applyNodeReplacement(new HeadingNode(text));
 }
 
-/**
- * Determines if node is a HeadingNode.
- * @param node - The node to be checked.
- * @returns true if node is a HeadingNode, false otherwise.
- */
+
 export function $isHeadingNode(
   node: LexicalNode | null | undefined,
 ): node is HeadingNode {

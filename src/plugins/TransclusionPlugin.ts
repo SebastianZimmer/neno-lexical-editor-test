@@ -1,6 +1,12 @@
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import {
+  useLexicalComposerContext,
+} from "@lexical/react/LexicalComposerContext";
 import { useEffect } from "react";
-import { $createTransclusionNode, $isTransclusionNode, TransclusionNode } from "../nodes/TransclusionNode";
+import {
+  $createTransclusionNode,
+  $isTransclusionNode,
+  TransclusionNode,
+} from "../nodes/TransclusionNode";
 import { LexicalEditor, LexicalNode, ParagraphNode } from "lexical";
 import { $isAutoLinkNode, AutoLinkNode } from "@lexical/link";
 
@@ -18,11 +24,10 @@ const transclusionsMatchSlashlinks = (
   }
 
   return true;
-}
+};
 
 const registerBlockNodeTransform = (editor: LexicalEditor) => {
   editor.registerNodeTransform(ParagraphNode, (node: ParagraphNode) => {
-
     const slashlinks = node.getChildren()
       .filter((child): child is AutoLinkNode => {
         return $isAutoLinkNode(child)
@@ -33,7 +38,7 @@ const registerBlockNodeTransform = (editor: LexicalEditor) => {
       .filter(
         (child: LexicalNode): child is TransclusionNode => {
           return $isTransclusionNode(child);
-      });
+        });
 
     if (transclusionsMatchSlashlinks(slashlinks, transclusions)) {
       return;
@@ -58,13 +63,13 @@ export default function TransclusionPlugin() {
 
   useEffect(() => {
     if (!editor.hasNodes([TransclusionNode])) {
-      throw new Error('Transclusion plugin is missing required nodes');
+      throw new Error("Transclusion plugin is missing required nodes");
     }
 
     return registerBlockNodeTransform(
       editor,
     );
-  }, [editor]);  
+  }, [editor]);
 
   return null;
 }

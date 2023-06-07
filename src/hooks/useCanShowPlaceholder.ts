@@ -6,12 +6,12 @@
  *
  */
 
-import type {LexicalEditor} from 'lexical';
+import type { LexicalEditor } from "lexical";
 
-import {$canShowPlaceholderCurry} from '@lexical/text';
-import {mergeRegister} from '@lexical/utils';
-import {useState} from 'react';
-import useLayoutEffect from './useLayoutEffect';
+import { $canShowPlaceholderCurry } from "@lexical/text";
+import { mergeRegister } from "@lexical/utils";
+import { useState } from "react";
+import useLayoutEffect from "./useLayoutEffect";
 
 function canShowPlaceholderFromCurrentEditorState(
   editor: LexicalEditor,
@@ -30,8 +30,8 @@ export function useCanShowPlaceholder(editor: LexicalEditor): boolean {
 
   useLayoutEffect(() => {
     function resetCanShowPlaceholder() {
-      const currentCanShowPlaceholder =
-        canShowPlaceholderFromCurrentEditorState(editor);
+      const currentCanShowPlaceholder
+        = canShowPlaceholderFromCurrentEditorState(editor);
       setCanShowPlaceholder(currentCanShowPlaceholder);
     }
     resetCanShowPlaceholder();

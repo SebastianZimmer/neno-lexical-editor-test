@@ -6,13 +6,14 @@
  *
  */
 
-import type {TextNode} from 'lexical';
+import type { TextNode } from "lexical";
 
-import {$createHeadingNode, HeadingNode} from '../nodes/HeadingNode';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {useLexicalTextEntity} from '@lexical/react/useLexicalTextEntity';
-import {useCallback, useEffect} from 'react';
-
+import { $createHeadingNode, HeadingNode } from "../nodes/HeadingNode";
+import {
+  useLexicalComposerContext,
+} from "@lexical/react/LexicalComposerContext";
+import { useLexicalTextEntity } from "@lexical/react/useLexicalTextEntity";
+import { useCallback, useEffect } from "react";
 
 
 const REGEX = /^#.*$/mi;
@@ -22,7 +23,7 @@ export function HeadingPlugin(): JSX.Element | null {
 
   useEffect(() => {
     if (!editor.hasNodes([HeadingNode])) {
-      throw new Error('HeadingPlugin: HeadingNode not registered on editor');
+      throw new Error("HeadingPlugin: HeadingNode not registered on editor");
     }
   }, [editor]);
 

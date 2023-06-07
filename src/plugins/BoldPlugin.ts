@@ -6,12 +6,14 @@
  *
  */
 
-import type {TextNode} from 'lexical';
+import type { TextNode } from "lexical";
 
-import {$createBoldNode, BoldNode} from '../nodes/BoldNode';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {useLexicalTextEntity} from '@lexical/react/useLexicalTextEntity';
-import {useCallback, useEffect} from 'react';
+import { $createBoldNode, BoldNode } from "../nodes/BoldNode";
+import {
+  useLexicalComposerContext,
+} from "@lexical/react/LexicalComposerContext";
+import { useLexicalTextEntity } from "@lexical/react/useLexicalTextEntity";
+import { useCallback, useEffect } from "react";
 
 const REGEX = /\*.*\*/;
 
@@ -20,7 +22,7 @@ export function BoldPlugin(): JSX.Element | null {
 
   useEffect(() => {
     if (!editor.hasNodes([BoldNode])) {
-      throw new Error('BoldPlugin: BoldNode not registered on editor');
+      throw new Error("BoldPlugin: BoldNode not registered on editor");
     }
   }, [editor]);
 

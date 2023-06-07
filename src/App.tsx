@@ -119,7 +119,7 @@ export const App = () => {
 
 # Gardening counterintuitive ideas
 We should take special care of *counterintuitive ideas* when gardening them. Kenneth Stanley talks in https://overcast.fm/+OxebA5HTY about /counterintuitive-ideas
-Ben Follington has an inspiring /guide-to-gardening-ideas 
+[[Ben Follington]] has an inspiring /guide-to-gardening-ideas 
 
 #ideas`,
     "Note 2 text",

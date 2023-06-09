@@ -142,3 +142,8 @@ div[data-lexical-editor] > p {
 .transclusion p.slug {
   color: var(--alt-content-color);
 }
+
+.inline-code {
+  font-family: 'IBM Plex Mono';
+  background-color: var(--background-color);
+}

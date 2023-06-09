@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import "./App.css";
 import "./ibm-plex-sans.css";
+import "./ibm-plex-mono.css";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -34,6 +35,8 @@ import TransclusionPlugin from "./plugins/TransclusionPlugin";
 import { SubtextPlugin } from "./plugins/SubtextPlugin";
 import setSubtext from "./utils/setSubtext";
 import getSubtextFromEditor from "./utils/getSubtextFromEditor";
+import { InlineCodeNode } from "./nodes/InlineCodeNode";
+import { InlineCodePlugin } from "./plugins/InlineCodePlugin";
 
 const theme = {
   ltr: "ltr",
@@ -47,6 +50,7 @@ const theme = {
   wikiLinkContent: "wikilink-content",
   bold: "bold",
   subtext: "subtext",
+  inlineCode: "inline-code",
 };
 
 
@@ -111,6 +115,7 @@ export const App = () => {
       WikiLinkPunctuationNode,
       BoldNode,
       TransclusionNode,
+      InlineCodeNode,
     ],
   };
 
@@ -153,6 +158,7 @@ We should take special care of *counterintuitive ideas* when gardening them. Ken
         <HashtagPlugin />
         <BoldPlugin />
         <HeadingPlugin />
+        <InlineCodePlugin />
         <LinkPlugin />
         <WikiLinkPlugin />
         <TransclusionPlugin />

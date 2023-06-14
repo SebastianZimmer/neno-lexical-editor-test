@@ -7,7 +7,7 @@
  *
  */
 
-import { $getRoot, CommandPayloadType, LexicalEditor } from "lexical";
+import { CommandPayloadType, LexicalEditor } from "lexical";
 
 import {
   $getHtmlContent,
@@ -46,8 +46,6 @@ import {
   IS_IOS,
   IS_SAFARI,
 } from "./environment";
-import setSubtext from "./setSubtext";
-import getSubtextFromEditor from "./getSubtextFromEditor";
 
 function onCopyForPlainText(
   event: CommandPayloadType<typeof COPY_COMMAND>,
@@ -86,9 +84,7 @@ function onPasteForPlainText(
           : event.clipboardData;
 
       if (clipboardData !== null && $isRangeSelection(selection)) {
-        const root = $getRoot();
         $insertDataTransferForPlainText(clipboardData, selection);
-        setSubtext(root, getSubtextFromEditor(root));
       }
     },
     {

@@ -33,6 +33,8 @@ import setSubtext from "./utils/setSubtext";
 import getSubtextFromEditor from "./utils/getSubtextFromEditor";
 import { InlineCodeNode } from "./nodes/InlineCodeNode";
 import { InlineCodePlugin } from "./plugins/InlineCodePlugin";
+import { CodeBlockNode } from "./nodes/CodeBlockNode";
+import { CodeBlockPlugin } from "./plugins/CodeBlockPlugin";
 
 const theme = {
   ltr: "ltr",
@@ -47,6 +49,7 @@ const theme = {
   bold: "bold",
   subtext: "subtext",
   inlineCode: "inline-code",
+  codeBlock: "code-block",
 };
 
 
@@ -120,6 +123,7 @@ export const Editor = ({
       BoldNode,
       TransclusionNode,
       InlineCodeNode,
+      CodeBlockNode,
     ],
   };
 
@@ -149,6 +153,7 @@ export const Editor = ({
       <LinkPlugin />
       <WikiLinkPlugin />
       <TransclusionPlugin />
+      <CodeBlockPlugin />
       <NodeEventPlugin
         nodeType={AutoLinkNode}
         eventType="click"

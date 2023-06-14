@@ -15,7 +15,7 @@ import {
 import { useLexicalTextEntity } from "@lexical/react/useLexicalTextEntity";
 import { useCallback, useEffect } from "react";
 
-const REGEX = /\*.*\*/;
+const REGEX = /\*[^*]+\*/;
 
 export function BoldPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext();

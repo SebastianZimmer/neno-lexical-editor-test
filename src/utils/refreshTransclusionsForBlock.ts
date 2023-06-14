@@ -64,19 +64,21 @@ const splitParagraphAtLineBreaks = (node: ParagraphNode): void => {
 
 export default (node: ParagraphNode) => {
   // this usually happens after a paste event, so let's fix the structure first
-  if (node.getTextContent().includes("\n")) {
+  if (node.getType() === "paragraph" && node.getTextContent().includes("\n")) {
     splitParagraphAtLineBreaks(node);
     return;
   }
 
-  const slashlinks = node.getChildren()
-    .filter((child): child is AutoLinkNode => {
-      return $isAutoLinkNode(child)
-        && (
-          child.getTextContent().startsWith("/")
-          || child.getTextContent().startsWith("@")
-        );
-    });
+  const slashlinks = node.getType() === "paragraph"
+    ? node.getChildren()
+      .filter((child): child is AutoLinkNode => {
+        return $isAutoLinkNode(child)
+          && (
+            child.getTextContent().startsWith("/")
+            || child.getTextContent().startsWith("@")
+          );
+      })
+    : []; // don't create slashlinks on code blocks
 
   const transclusions: TransclusionNode[] = node.getChildren()
     .filter(

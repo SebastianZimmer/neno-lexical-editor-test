@@ -143,7 +143,7 @@ div[data-lexical-editor] > p {
   color: var(--alt-content-color);
 }
 
-.inline-code {
+.inline-code, .code-block {
   font-family: 'IBM Plex Mono';
   background-color: var(--background-color);
 }

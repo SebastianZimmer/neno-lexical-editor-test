@@ -9,24 +9,13 @@
 import type { TextNode } from "lexical";
 
 import { $createHeadingNode, HeadingNode } from "../nodes/HeadingNode";
-import {
-  useLexicalComposerContext,
-} from "@lexical/react/LexicalComposerContext";
 import { useLexicalTextEntity } from "@lexical/react/useLexicalTextEntity";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 
 const REGEX = /^#.*$/mi;
 
 export function HeadingPlugin(): JSX.Element | null {
-  const [editor] = useLexicalComposerContext();
-
-  useEffect(() => {
-    if (!editor.hasNodes([HeadingNode])) {
-      throw new Error("HeadingPlugin: HeadingNode not registered on editor");
-    }
-  }, [editor]);
-
   const createHeadingNode = useCallback((textNode: TextNode): HeadingNode => {
     return $createHeadingNode(textNode.getTextContent());
   }, []);

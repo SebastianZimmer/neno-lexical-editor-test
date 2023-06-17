@@ -1,7 +1,7 @@
 import {
   useLexicalComposerContext,
 } from "@lexical/react/LexicalComposerContext";
-import { useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import {
   TransclusionNode,
 } from "../nodes/TransclusionNode";
@@ -11,9 +11,12 @@ import refreshTransclusionsForBlock
 import { AutoLinkNode } from "@lexical/link";
 
 
-const registerBlockNodeTransform = (editor: LexicalEditor) => {
+const registerBlockNodeTransform = (
+  editor: LexicalEditor,
+  getTransclusionContent: (id: string) => ReactElement,
+) => {
   editor.registerNodeTransform(ParagraphNode, (node: ParagraphNode) => {
-    refreshTransclusionsForBlock(node);
+    refreshTransclusionsForBlock(node, getTransclusionContent);
   });
 
   editor.registerNodeTransform(AutoLinkNode, (node: AutoLinkNode) => {
@@ -21,11 +24,19 @@ const registerBlockNodeTransform = (editor: LexicalEditor) => {
     while (!$isParagraphNode(block)) {
       block = block.getParent();
     }
-    refreshTransclusionsForBlock(block);
+    refreshTransclusionsForBlock(block, getTransclusionContent);
   });
 };
 
-export default function TransclusionPlugin() {
+
+interface TransclusionPluginProps {
+  getTransclusionContent: (id: string) => ReactElement
+}
+
+
+export default function TransclusionPlugin({
+  getTransclusionContent,
+}: TransclusionPluginProps) {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
@@ -35,6 +46,7 @@ export default function TransclusionPlugin() {
 
     return registerBlockNodeTransform(
       editor,
+      getTransclusionContent,
     );
   }, [editor]);
 

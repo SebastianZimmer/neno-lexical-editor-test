@@ -4,7 +4,7 @@ import {
   CLEAR_HISTORY_COMMAND,
   EditorState,
 } from "lexical";
-import { useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -105,12 +105,14 @@ export enum UserRequestType {
   HYPERLINK = "HYPERLINK",
   WIKILINK = "WIKILINK",
   SLASHLINK = "SLASHLINK",
+  TRANSCLUSION_TARGET = "TRANSCLUSION_TARGET"
 }
 
 interface EditorProps {
   text: string,
   onChange: (text: string) => void,
   onUserRequest: (type: UserRequestType, value: string) => void,
+  getTransclusionContent: (id: string) => ReactElement,
 }
 
 
@@ -118,6 +120,7 @@ export const Editor = ({
   text,
   onChange,
   onUserRequest,
+  getTransclusionContent,
 }: EditorProps) => {
   const initialConfig = {
     namespace: "MyEditor",
@@ -161,7 +164,9 @@ export const Editor = ({
       <InlineCodePlugin />
       <LinkPlugin />
       <WikiLinkPlugin />
-      <TransclusionPlugin />
+      <TransclusionPlugin
+        getTransclusionContent={getTransclusionContent}
+      />
       <CodeBlockPlugin />
       <NodeEventPlugin
         nodeType={AutoLinkNode}
@@ -186,6 +191,27 @@ export const Editor = ({
           if (!(e && e.target)) return;
           const link = (e.target as HTMLElement).innerText;
           onUserRequest(UserRequestType.WIKILINK, link);
+        }}
+      />
+      <NodeEventPlugin
+        nodeType={TransclusionNode}
+        eventType="click"
+        eventListener={(e: Event) => {
+          if (!(e && e.target)) return;
+          let cursorElement = e.target as HTMLElement;
+          do {
+            if ("transclusionId" in cursorElement.dataset) {
+              const transclusionId
+                = cursorElement.dataset.transclusionId as string;
+              onUserRequest(
+                UserRequestType.TRANSCLUSION_TARGET,
+                transclusionId,
+              );
+              return;
+            }
+
+            cursorElement = cursorElement.parentElement as HTMLElement;
+          } while (cursorElement);
         }}
       />
     </LexicalComposer>

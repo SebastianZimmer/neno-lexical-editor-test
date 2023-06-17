@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { Editor, UserRequestType } from "./Editor";
 
 import "./App.css";
 import "./ibm-plex-sans.css";
 import "./ibm-plex-mono.css";
+import transclusions from "./transclusions";
 
 export const App = () => {
   const [notes, setNotes] = useState([
@@ -12,7 +13,8 @@ export const App = () => {
 
 # Gardening counterintuitive ideas
 We should take special care of *counterintuitive ideas* when gardening them. Kenneth Stanley talks in https://overcast.fm/+OxebA5HTY about /counterintuitive-ideas
-[[Ben Follington]] has an inspiring /guide-to-gardening-ideas 
+[[Ben Follington]] has an inspiring /guide-to-gardening-ideas
+I'm always having good ideas at /my-favorite-beach
 
 #ideas`,
     "Note 2 text",
@@ -24,7 +26,7 @@ We should take special care of *counterintuitive ideas* when gardening them. Ken
 
   return (
     <>
-      <h1>Subtext Web Editor PoC</h1>
+      <h1>Subtext Web Editor Playground</h1>
       <Editor
         onChange={(text) => {
           setCurrentEditorText(text);
@@ -33,6 +35,13 @@ We should take special care of *counterintuitive ideas* when gardening them. Ken
         onUserRequest={(type: UserRequestType, value: string) => {
           // eslint-disable-next-line no-console
           console.log(`Click on ${type}: ${value}`);
+        }}
+        getTransclusionContent={(id: string) => {
+          if (transclusions.has(id)) {
+            return transclusions.get(id) as ReactElement;
+          } else {
+            return <p></p>;
+          }
         }}
       />
       <button

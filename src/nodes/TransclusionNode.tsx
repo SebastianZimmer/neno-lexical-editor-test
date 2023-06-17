@@ -4,8 +4,7 @@ import {
   NodeKey,
   SerializedLexicalNode,
 } from "lexical";
-import { ReactNode } from "react";
-import transclusions from "../transclusions";
+import { ReactElement, ReactNode } from "react";
 
 
 export class TransclusionNode extends DecoratorNode<ReactNode> {
@@ -14,19 +13,29 @@ export class TransclusionNode extends DecoratorNode<ReactNode> {
   }
 
   static clone(node: TransclusionNode): TransclusionNode {
-    return new TransclusionNode(node.__link, node.__key);
+    return new TransclusionNode(
+      node.__link,
+      node.__getTransclusionContent,
+      node.__key,
+    );
   }
 
   __link: string;
 
-  constructor(link: string, key?: NodeKey) {
+  constructor(
+    link: string,
+    getTransclusionContent: (id: string) => ReactElement,
+    key?: NodeKey,
+  ) {
     super(key);
     this.__link = link;
+    this.__getTransclusionContent = getTransclusionContent;
   }
 
   decorate(): ReactNode {
-    return <div>
-      <p>{transclusions.get(this.__link.substring(1))}</p>
+    const transclusionId = this.__link.substring(1);
+    return <div data-transclusion-id={transclusionId}>
+      {this.__getTransclusionContent(transclusionId)}
       <p className="slug">{this.__link}</p>
     </div>;
   }
@@ -55,8 +64,11 @@ export class TransclusionNode extends DecoratorNode<ReactNode> {
   }
 }
 
-export function $createTransclusionNode(link: string): TransclusionNode {
-  return new TransclusionNode(link);
+export function $createTransclusionNode(
+  link: string,
+  getTransclusionContent: (id: string) => ReactElement,
+): TransclusionNode {
+  return new TransclusionNode(link, getTransclusionContent);
 }
 
 export function $isTransclusionNode(

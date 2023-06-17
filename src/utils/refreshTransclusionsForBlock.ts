@@ -12,6 +12,7 @@ import {
   ParagraphNode,
 } from "lexical";
 import { $isAutoLinkNode, AutoLinkNode } from "@lexical/link";
+import { ReactElement } from "react";
 
 const transclusionsMatchSlashlinks = (
   slashlinks: AutoLinkNode[],
@@ -62,7 +63,10 @@ const splitParagraphAtLineBreaks = (node: ParagraphNode): void => {
 };
 
 
-export default (node: ParagraphNode) => {
+export default (
+  node: ParagraphNode,
+  getTransclusionContent: (id: string) => ReactElement,
+) => {
   // this usually happens after a paste event, so let's fix the structure first
   if (node.getType() === "paragraph" && node.getTextContent().includes("\n")) {
     splitParagraphAtLineBreaks(node);
@@ -98,6 +102,7 @@ export default (node: ParagraphNode) => {
   slashlinks.forEach((slashlinkNode) => {
     const transclusionNode = $createTransclusionNode(
       slashlinkNode.getTextContent(),
+      getTransclusionContent,
     );
     node.append(transclusionNode);
   });

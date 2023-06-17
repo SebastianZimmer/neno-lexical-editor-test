@@ -1,12 +1,10 @@
 /* eslint-disable max-len */
 import { useState } from "react";
+import { Editor, UserRequestType } from "./Editor";
 
 import "./App.css";
 import "./ibm-plex-sans.css";
 import "./ibm-plex-mono.css";
-
-import { Editor } from "./Editor";
-
 
 export const App = () => {
   const [notes, setNotes] = useState([
@@ -32,6 +30,10 @@ We should take special care of *counterintuitive ideas* when gardening them. Ken
           setCurrentEditorText(text);
         }}
         text={text}
+        onUserRequest={(type: UserRequestType, value: string) => {
+          // eslint-disable-next-line no-console
+          console.log(`Click on ${type}: ${value}`);
+        }}
       />
       <button
         onClick={() => {

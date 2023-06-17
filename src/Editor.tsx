@@ -100,15 +100,24 @@ const PlainTextStateExchangePlugin = ({ text }: { text: string }) => {
   return null;
 };
 
+
+export enum UserRequestType {
+  HYPERLINK = "HYPERLINK",
+  WIKILINK = "WIKILINK",
+  SLASHLINK = "SLASHLINK",
+}
+
 interface EditorProps {
   text: string,
   onChange: (text: string) => void,
+  onUserRequest: (type: UserRequestType, value: string) => void,
 }
 
 
 export const Editor = ({
   text,
   onChange,
+  onUserRequest,
 }: EditorProps) => {
   const initialConfig = {
     namespace: "MyEditor",
@@ -164,11 +173,19 @@ export const Editor = ({
           if (!(e && e.target)) return;
           const link = (e.target as HTMLElement).innerText;
           if (isSlashlink(link)) {
-            // eslint-disable-next-line no-console
-            console.log("Click on slashlink: " + link);
+            onUserRequest(UserRequestType.SLASHLINK, link.substring(1));
           } else {
-            window.open(link);
+            onUserRequest(UserRequestType.HYPERLINK, link);
           }
+        }}
+      />
+      <NodeEventPlugin
+        nodeType={WikiLinkContentNode}
+        eventType="click"
+        eventListener={(e: Event) => {
+          if (!(e && e.target)) return;
+          const link = (e.target as HTMLElement).innerText;
+          onUserRequest(UserRequestType.WIKILINK, link);
         }}
       />
     </LexicalComposer>

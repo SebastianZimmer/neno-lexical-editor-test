@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { ReactElement, useState } from "react";
-import { Editor, UserRequestType } from "./Editor";
+import { Editor, UserRequestType } from "./editor";
 
 import "./App.css";
 import "./ibm-plex-sans.css";
